@@ -19,12 +19,12 @@
 
 package "autossh"
 
-template '/etc/init.d/autossh' do
-  source 'autossh.init.erb'
+cookbook_file '/etc/init.d/autossh' do
+  source 'autossh.init'
   mode 0755
   owner 'root'
   group 'root'
-  notifies :restart, 'service[autossh]'
+  notifies :restart, 'service[autossh]', :delayed
 end
 
 service "autossh" do

@@ -1,0 +1,230 @@
+#!/bin/bash
+#
+# autossh      This shell script starts and stops autossh instance
+#
+# chkconfig: - 95 05
+#
+### BEGIN INIT INFO
+# Provides: autossh
+# Required-Start: $network
+# Required-Stop: $network
+# Default-Start:
+# Default-Stop:
+# Description: autossh instance
+# Short-Description: start and stop autossh
+### END INIT INFO
+#
+# - based on tomcat7 init script from EPEL
+# - rewritten for autossh by Nico Kadel-Garcia
+#
+
+## Source function library.
+#. /etc/rc.d/init.d/functions
+# Source LSB function library.
+if [ -r /lib/lsb/init-functions ]; then
+    . /lib/lsb/init-functions
+else
+    exit 1
+fi
+
+DISTRIB_ID=`lsb_release -i -s 2>/dev/null`
+
+NAME="$(basename $0)"
+unset ISBOOT
+if [ "${NAME:0:1}" = "S" -o "${NAME:0:1}" = "K" ]; then
+    NAME="${NAME:3}"
+    ISBOOT="1"
+fi
+
+# For SELinux we need to use 'runuser' not 'su'
+if [ -x "/sbin/runuser" ]; then
+    SU="/sbin/runuser -s /bin/sh"
+else
+    SU="/bin/su -s /bin/sh"
+fi
+
+# Path to the autossh binary
+AUTOSSH_BIN="/usr/bin/autossh"
+
+# Define the autossh username
+AUTOSSH_USER="autossh"
+
+# Needed for autossh command environment
+AUTOSSH_LOGFILE="/var/log/autossh/${NAME}.log"
+
+# Needed for autossh command environment
+AUTOSSH_PIDFILE="/var/run/autossh/${NAME}.pid"
+
+# Set polling consistently
+AUTOSSH_POLL="-5"
+
+# Autossh specific command line options
+AUTOSSH_OPTS="-M 0"
+
+# SSH specific command line options
+SSH_OPTS="-vv -f -N"
+
+# Forwarding ports, set to empty
+#SSH_LPORTS=""
+
+# Reverse forwarding ports, set to empty
+#SSH_RPORTS=""
+
+# SSH server to connect to
+#SSH_HOST=""
+
+# Set lock file consistently
+AUTOSSH_LOCKFILE=/var/lock/subsys/${NAME}
+
+# Set timeout settings for stopping daemon
+AUTOSSH_STOP_TIMEOUT=10
+
+# Get instance specific config file, required for specific AUTOSSH_OPTS
+if [ -r "/etc/sysconfig/${NAME}" ]; then
+    . /etc/sysconfig/${NAME}
+fi
+
+RETVAL="0"
+
+# See how we were called.
+function start() {
+   echo -n "Starting ${NAME}: "
+   if [ -z "$AUTOSSH_OPTS" ]; then
+       log_failure_msg "AUTOSSH_OPTS not set"
+       RETVAL="4"
+       return
+   elif [ -z "$AUTOSSH_LOGFILE" ]; then
+       log_failure_msg "AUTOSSH_LOGFILE not set"
+       RETVAL="4"
+       return
+   elif [ -z "$AUTOSSH_PIDFILE" ]; then
+       log_failure_msg "AUTOSSH_PIDFILE not set"
+       RETVAL="4"
+       return
+   elif [ -z "$SSH_RPORTS" -a -z "$SSH_LPORTS"  ]; then
+       log_failure_msg "SSH_RPORTS and SSH_LPORTS not set"
+       RETVAL="4"
+       return
+   elif [ -z "$SSH_HOST"  ]; then
+       log_failure_msg "SSH_HOST not set"
+       RETVAL="4"
+       return
+   fi
+   if [ "$RETVAL" != "0" ]; then 
+     log_failure_msg
+     return
+   fi
+   if [ -f "${AUTOSSH_LOCKFILE}" ]; then
+        if [ -s "${AUTOSSH_PIDFILE}" ]; then
+            read kpid < ${AUTOSSH_PIDFILE}
+#           if checkpid $kpid 2>&1; then
+            if [ -d "/proc/${kpid}" ]; then
+                log_success_msg
+                return 0
+            fi
+        fi
+    fi
+    # fix permissions on the log and pid files
+    touch $AUTOSSH_PIDFILE 2>&1 || RETVAL="4"
+    if [ "$RETVAL" -eq "0" -a "$?" -eq "0" ]; then 
+      chown ${AUTOSSH_USER}:${AUTOSSH_USER} $AUTOSSH_PIDFILE
+    fi
+    [ "$RETVAL" -eq "0" ] && touch $AUTOSSH_LOGFILE 2>&1 || RETVAL="4" 
+    if [ "$RETVAL" -eq "0" -a "$?" -eq "0" ]; then
+      chown ${AUTOSSH_USER}:${AUTOSSH_USER} $AUTOSSH_LOGFILE
+    fi
+
+
+    #parseOptions
+    [ "$RETVAL" -eq "0" ] && \
+	$SU - $AUTOSSH_USER -c "AUTOSSH_LOGFILE=${AUTOSSH_LOGFILE} AUTOSSH_PIDFILE=${AUTOSSH_PIDFILE} AUTOSSH_POLL=${AUTOSSH_POLL} ${AUTOSSH_BIN} ${AUTOSSH_OPTS} ${SSH_OPTS} ${SSH_LPORTS} ${SSH_RPORTS} ${SSH_HOST}" >> ${AUTOSSH_LOGFILE} 2>&1 || \
+	RETVAL="4"
+    if [ "$RETVAL" -eq "0" ]; then 
+        log_success_msg
+        touch ${AUTOSSH_LOCKFILE}
+    else
+        log_failure_msg "Error code ${RETVAL}"
+    fi
+}
+
+function stop() {
+    echo -n "Stopping ${NAME}: "
+    #killproc -p ${AUTOSSH_PIDFILE} -d ${AUTOSSH_STOP_TIMEOUT} ${NAME}
+    killproc -p ${AUTOSSH_PIDFILE} -d ${AUTOSSH_STOP_TIMEOUT} autossh
+
+    echo
+    [ $RETVAL = 0 ] && rm -f ${AUTOSSH_PIDFILE} ${AUTOSSH_LOCKFILE}
+}
+
+function usage()
+{
+   echo "Usage: $0 {start|stop|restart|condrestart|try-restart|force-reload|status|version}"
+   RETVAL="2"
+}
+
+# See how we were called.
+RETVAL="0"
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    condrestart|try-restart)
+        if [ -s "${AUTOSSH_PIDFILE}" ]; then
+            stop
+            start
+        fi
+        ;;
+    force-reload)
+        if [ -s "${AUTOSSH_PIDFILE}" ]; then
+            stop
+            start
+        fi
+        ;;
+    status)
+        if [ -s "${AUTOSSH_PIDFILE}" ]; then
+            read kpid < ${AUTOSSH_PIDFILE}
+            if [ -d "/proc/${kpid}" ]; then
+                log_success_msg "${NAME} (pid ${kpid}) is running..."
+                RETVAL="0"
+            else
+# The pid file exists but the process is not running
+               log_warning_msg "PID file exists, but process is not running"
+               RETVAL="1"
+            fi
+        else
+            pid="$(/usr/bin/pgrep -d , -u ${AUTOSSH_USER} -G ${AUTOSSH_USER} java)"
+            if [ -z "$pid" ]; then
+#               status ${NAME}
+#               RETVAL="$?"
+                log_success_msg "${NAME} is stopped"
+                RETVAL="3"
+            else
+                log_success_msg "${NAME} (pid $pid) is running..."
+                RETVAL="0"
+            fi
+        fi
+         if [ -f ${AUTOSSH_LOCKFILE} ]; then
+            pid="$(/usr/bin/pgrep -d , -u ${AUTOSSH_USER} -G ${AUTOSSH_USER} java)"
+# The lockfile exists but the process is not running
+            if [ -z "$pid" ]; then
+               log_failure_msg "${NAME} lockfile exists but process is not running"
+               RETVAL="2"
+            fi
+         fi
+        ;;
+    version)
+        ${AUTOSSH_BIN} -V
+        ;;
+    *)
+      usage
+      ;;
+esac
+
+exit $RETVAL
