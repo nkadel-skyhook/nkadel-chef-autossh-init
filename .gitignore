@@ -1,0 +1,8 @@
+*~
+.berkshelf/cookbooks
+berks-cookbooks/
+/chef-client-running.pid
+/chef-stacktrace.out
+/install.sh
+/node.json
+/solo.json
