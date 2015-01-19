@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: autossh_init
+# Cookbook Name:: autossh-init
 # Recipe:: default
 #
 # Copyright (C) 2014 Skyhook Wireless
@@ -19,6 +19,13 @@
 
 package "autossh"
 
+cookbook_file '/etc/logrotate.d/autossh' do
+  source 'autossh.logrotate'
+  mode 0644
+  owner 'root'
+  group 'root'
+end
+
 cookbook_file '/etc/init.d/autossh' do
   source 'autossh.init'
   mode 0755
@@ -27,7 +34,9 @@ cookbook_file '/etc/init.d/autossh' do
   notifies :restart, 'service[autossh]', :delayed
 end
 
-service "autossh" do
+service 'autossh' do
   action [:start, :enable]
   supports :restart => true, :reload => true, :status => true
 end
+
+node['autossh']['instances'

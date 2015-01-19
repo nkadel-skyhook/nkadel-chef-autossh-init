@@ -1,0 +1,8 @@
+# Logrotate file for autossh
+/var/log/autossh/*log {
+    missingok
+    notifempty
+    delaycompress
+    daily
+    rotate 7
+}

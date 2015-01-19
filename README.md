@@ -1,6 +1,6 @@
-# autossh_init-cookbook
+# autossh-init-cookbook
 
-Configure autossh_init
+Configure autossh-init
 
 ## Supported Platforms
 
@@ -8,14 +8,14 @@ Configure autossh_init
 
 ## Usage
 
-### autossh_init::default
+### autossh-init::default
 
-Include `autossh_init` in your node's `run_list`:
+Include `autossh-init` in your node's `run_list`:
 
 ```json
 {
   "run_list": [
-    "recipe[autossh_init::default]"
+    "recipe[autossh-init::default]"
   ]
 }
 ```
