@@ -6,6 +6,8 @@ autossh_init cookbook.
 v0.1.2
 ------
 - Change name to 'autossh-init'
+- Activate attributes in template
+- Disable base autossh startup unless ssh_lports or ssh_rports enabled.
 
 v0.1.1
 ------

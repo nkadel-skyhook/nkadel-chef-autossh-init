@@ -19,6 +19,14 @@
 
 package "autossh"
 
+# init script currently depends on lsb-functions for pgrep
+case node[:platrfom]
+when "redhat", "centos", "scientific", "oracle"
+  package "redhat-lsb-core" do
+    action :install
+  end
+end
+
 cookbook_file '/etc/logrotate.d/autossh' do
   source 'autossh.logrotate'
   mode 0644
@@ -26,17 +34,21 @@ cookbook_file '/etc/logrotate.d/autossh' do
   group 'root'
 end
 
+# Configure base autossh, disabled by default
 cookbook_file '/etc/init.d/autossh' do
   source 'autossh.init'
   mode 0755
   owner 'root'
   group 'root'
-  notifies :restart, 'service[autossh]', :delayed
+  if node['autossh-init']['ssh_lports'].nil? && node['autossh-init']['ssh_rports'].nil?
+    notifies :disable, 'service[autossh]', :delayed
+  else
+    notifies :restart, 'service[autossh]', :delayed
+  end
 end
 
 service 'autossh' do
-  action [:start, :enable]
-  supports :restart => true, :reload => true, :status => true
+  action [:nothing]
+  supports :stop => true, :restart => true, :reload => true, :status => true
 end
 
-node['autossh']['instances'

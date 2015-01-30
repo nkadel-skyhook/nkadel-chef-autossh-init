@@ -9,9 +9,11 @@
 
 # Default AUTOSSH_POLL
 #AUTOSSH_POLL="5"
+<%= 'AUTOSSH_POLL="@autossh_poll"' unless @autossh_poll.nil? %>
 
 # Autossh specific command line options
 #AUTOSSH_OPTS="-M 0"
+<%= 'AUTOSSH_OPTS="@autossh_opts"' unless @autossh_opts.nil? %>
 
 # Default SSH options
 #SSH_OPTS="-vv -f -N"
@@ -20,9 +22,12 @@
 #SSH_OPTS="$SSH_OPTS -p 22"
 #SSH_OPTS="$SSH_OPTS -l ${AUTOSSH_USER}"
 #SSH_OPTS="$SSH_OPTS -i /home/${AUTOSSH_UESR}/.ssh/id_dsa"
+<%= 'SSH_OPTS="@ssh_opts"' unless @ssh_opts.nil? %>
 
 # Forwarding to remote mysql port only from localhost, set as neeeded
 #SSH_LPORTS="-Llocalhost:L2222:remote.domain:3306"
+<%= 'SSH_LPORTS="@ssh_lports"' unless @ssh_lports.nil? %>
 
 # Reverse forwarding to mysql port only from remote localhost, set as needed
 #SSH_RPORTS="-Rlocalhost:4444:local.domain:3306"
+<%= 'SSH_RPORTS="@ssh_rports"' unless @ssh_rports.nil? %>
