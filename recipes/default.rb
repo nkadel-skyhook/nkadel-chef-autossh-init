@@ -34,6 +34,26 @@ cookbook_file '/etc/logrotate.d/autossh' do
   group 'root'
 end
 
+template node['autossh-init']['sysconfigdir'] + '/autossh' do
+  source 'autossh.sysconfig.erb'
+  owner 'root'
+  group 'root'
+  mode '0644'
+  variables({
+    :autossh_user => node['autossh-init']['autossh_user'],
+    :autossh_poll => node['autossh-init']['autossh_poll'],
+    :autossh_opts => node['autossh-init']['autossh_opts'],
+    :ssh_opts => node['autossh-init']['ssh_opts'],
+    :ssh_lports => node['autossh-init']['ssh_lports'],
+    :ssh_rports => node['autossh-init']['ssh_rports']
+  })
+  if node['autossh-init']['ssh_lports'].nil? && node['autossh-init']['ssh_rports'].nil?
+    notifies :disable, 'service[autossh]', :delayed
+  else
+    notifies :restart, 'service[autossh]', :delayed
+  end
+end
+
 # Configure base autossh, disabled by default
 cookbook_file '/etc/init.d/autossh' do
   source 'autossh.init'
