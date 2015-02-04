@@ -34,3 +34,8 @@ default['autossh-init']['ssh_lports'] = nil
 default['autossh-init']['ssh_rports'] = nil
 # Sample ports remote ssh server port 2222 to localhost port 22
 #default['autossh-init']['ssh_rports'] = '-Rlocalhost:2022:localhost:22'
+
+# Required to start autossh init
+# Disabled by default
+default['autossh-init']['ssh_host'] = nil
+

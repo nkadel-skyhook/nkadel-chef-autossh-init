@@ -45,8 +45,10 @@ template node['autossh-init']['sysconfigdir'] + '/autossh' do
     :autossh_opts => node['autossh-init']['autossh_opts'],
     :ssh_opts => node['autossh-init']['ssh_opts'],
     :ssh_lports => node['autossh-init']['ssh_lports'],
-    :ssh_rports => node['autossh-init']['ssh_rports']
+    :ssh_rports => node['autossh-init']['ssh_rports'],
+    :ssh_host => node['autossh-init']['ssh_host']
   })
+  # Simply publish reference template if no ports enabled
   if node['autossh-init']['ssh_lports'].nil? && node['autossh-init']['ssh_rports'].nil?
     notifies :disable, 'service[autossh]', :delayed
   else
@@ -62,6 +64,9 @@ cookbook_file '/etc/init.d/autossh' do
   group 'root'
   if node['autossh-init']['ssh_lports'].nil? && node['autossh-init']['ssh_rports'].nil?
     notifies :disable, 'service[autossh]', :delayed
+#Disable check for valid ssh_host for now, let startup fail
+#  elsif node['autossh-init']['ssh_host'].nil?
+#    notifies :disable, 'service[autossh]', :delayed
   else
     notifies :restart, 'service[autossh]', :delayed
   end
