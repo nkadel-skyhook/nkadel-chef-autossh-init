@@ -42,3 +42,11 @@ SSH_LPORTS="<%= @ssh_lports %>"
 <% unless @ssh_rports.nil? -%>
 SSH_RPORTS="<%= @ssh_rports %>"
 <% end -%>
+
+# Target of SSH connection, may contain username or port as well
+#SSH_HOST=localhost
+#SSH_HOST=autossh@localhost.localdomain
+#SSH_HOST=localhost.localdomain:22
+<% unless @ssh_host.nil? -%>
+SSH_HOST="<%= @ssh_host %>"
+<% end -%>
