@@ -38,4 +38,3 @@ default['autossh-init']['ssh_rports'] = nil
 # Required to start autossh init
 # Disabled by default
 default['autossh-init']['ssh_host'] = nil
-
