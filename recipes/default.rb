@@ -17,15 +17,18 @@
 # limitations under the License.
 
 
-package "autossh"
+package 'autossh'
 
 # init script currently depends on lsb-functions for pgrep
-case node[:platrfom]
-when "redhat", "centos", "scientific", "oracle"
-  package "redhat-lsb-core" do
+case node[:platform]
+when 'redhat', 'centos', 'scientific', 'oracle'
+  package 'redhat-lsb-core' do
     action :install
   end
 end
+
+# Default autossh user for autpssj servoces, locked account
+include_recipe 'autossh-init::user'
 
 cookbook_file '/etc/logrotate.d/autossh' do
   source 'autossh.logrotate'

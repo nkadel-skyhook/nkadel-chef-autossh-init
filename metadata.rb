@@ -5,6 +5,8 @@ license          'All rights reserved'
 description      'Installs/Configures autossh init scripts'
 version          '0.1.3'
 
+depends 'user'
+
 supports 'redhat'
 supports 'centos'
 supports 'fedora'
