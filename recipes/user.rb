@@ -23,7 +23,7 @@ user 'autossh' do
   comment node['autossh-init']['user']['comment']
   home node['autossh-init']['user']['home']
   shell node['autossh-init']['user']['shell']
-  system node['autossh-init']['user']['shell']
+  system node['autossh-init']['user']['system']
   username node['autossh-init']['user']['username']
 end
 
