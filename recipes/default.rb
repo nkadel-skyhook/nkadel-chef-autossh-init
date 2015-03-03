@@ -24,8 +24,8 @@ case node[:platform]
 when 'redhat', 'centos', 'scientific', 'oracle'
   package '/lib/lsb/init-functions' do
     action :install
+    unless ::File.exists?('/lib/lsb/init-functions')
   end
-  unless ::File.exists?('/lib/lsb/init-functions')
 end
 
 # Default autossh user for autpssj servoces, locked account
