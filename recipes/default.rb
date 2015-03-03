@@ -19,12 +19,13 @@
 
 package 'autossh'
 
-# init script currently depends on lsb-functions for pgrep
+# init script currently depends on init-functions for pgrep
 case node[:platform]
 when 'redhat', 'centos', 'scientific', 'oracle'
-  package 'redhat-lsb-core' do
+  package '/lib/lsb/init-functions' do
     action :install
   end
+  unless ::File.exists?('/lib/lsb/init-functions')
 end
 
 # Default autossh user for autpssj servoces, locked account
