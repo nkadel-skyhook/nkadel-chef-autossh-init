@@ -15,10 +15,19 @@ Include `autossh-init` in your node's `run_list`:
 ```json
 {
   "run_list": [
-    "recipe[autossh-init::default]"
+    "recipe[autossh-init]"
   ]
 }
 ```
+
+### autossh-init::instances
+
+Configures individual autossh instances as defined in attributes
+
+### autossh-init::user
+
+Configures default autossh user, included by default
+
 
 License and Authors
 -------------------
