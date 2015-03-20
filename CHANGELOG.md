@@ -3,9 +3,14 @@ autossh-init Cookbook CHANGELOG
 This file is used to list changes made in each version of the
 autossh_init cookbook.
 
+v0.1.5
+------
+- Deploy /lsb/lib/init-functions as needed
+
 v0.1.4
 ------
 - Activate default 'autossh' user
+- Deploy directories as needed
 
 v0.1.3
 ------

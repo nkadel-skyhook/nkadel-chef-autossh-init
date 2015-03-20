@@ -3,7 +3,7 @@ maintainer       'Nico Kadel-Garcia'
 maintainer_email 'nkadel@skyhookwireless.com'
 license          'All rights reserved'
 description      'Installs/Configures autossh init scripts'
-version          '0.1.4'
+version          '0.1.5'
 
 depends 'user'
 
