@@ -32,6 +32,20 @@ end
 # Default autossh user for autpssj servoces, locked account
 include_recipe 'autossh-init::user'
 
+# PID file directory, init script sets ownership of pid files
+directory '/var/run/autossh' do
+  mode 0755
+  owner 'root'
+  group 'root'
+end
+
+# Log directory, init script sets ownership of log files
+directory '/var/log/autossh' do
+  mode 0755
+  owner 'root'
+  group 'root'
+end
+
 cookbook_file '/etc/logrotate.d/autossh' do
   source 'autossh.logrotate'
   mode 0644
