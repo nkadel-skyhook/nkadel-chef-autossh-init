@@ -20,11 +20,12 @@
 package 'autossh'
 
 # init script currently depends on init-functions for pgrep
-case node[:platform]
-when 'redhat', 'centos', 'scientific', 'oracle'
-  package '/lib/lsb/init-functions' do
-    action :install
-    unless ::File.exists?('/lib/lsb/init-functions')
+unless File.exists?('/lib/lsb/init-functions')
+  case node[:platform]
+  when 'redhat', 'centos', 'scientific', 'oracle'
+    package 'redhat-lsb-core' do
+      action :install
+    end
   end
 end
 
