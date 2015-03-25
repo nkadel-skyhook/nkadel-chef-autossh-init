@@ -5,8 +5,8 @@ autossh_init cookbook.
 
 v0.1.7
 ------
-- Add "-o 'StrictHostKeyChecking no'" to SSH_OPTS, to avoid
-  silent autossh failures with new or changed target hosts
+- Deploy ssh/config file to set 'StrictHostKeyChecking no',
+  since piping SSH options through /etc/sysconfig/autossh gets nightmarish
 
 v0.1.5
 ------

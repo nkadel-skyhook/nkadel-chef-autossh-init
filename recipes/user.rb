@@ -43,3 +43,9 @@ directory node['autossh-init']['user']['home'] + '/.ssh' do
   mode '0700'
 end
 
+template node['autossh-init']['user']['home'] + '/.ssh/config' do
+  source "ssh_config.erb"
+  owner node['autossh-init']['user']['username']
+  group node['autossh-init']['user']['username']
+  mode '0600'
+end

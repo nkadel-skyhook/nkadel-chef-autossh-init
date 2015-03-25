@@ -26,7 +26,7 @@ Configures individual autossh instances as defined in attributes
 
 ### autossh-init::user
 
-Configures default autossh user, included by default
+Configures default autossh user, homedir, and .ssh/config, included by default
 
 
 License and Authors
