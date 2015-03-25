@@ -3,6 +3,10 @@ autossh-init Cookbook CHANGELOG
 This file is used to list changes made in each version of the
 autossh_init cookbook.
 
+v0.1.6
+------
+- Autodeploy /var/run/autossh and /var/log/autossh
+
 v0.1.5
 ------
 - Deploy /lsb/lib/init-functions as needed
