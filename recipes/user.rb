@@ -28,14 +28,18 @@ user 'autossh' do
 end
 
 directory node['autossh-init']['user']['home'] do
-  owner node['autossh-init']['user']['uid']
-  group node['autossh-init']['user']['gid']
+  #owner node['autossh-init']['user']['uid']
+  #group node['autossh-init']['user']['gid']
+  owner node['autossh-init']['user']['username']
+  group node['autossh-init']['user']['username']
   mode '0700'
 end
 
 directory node['autossh-init']['user']['home'] + '/.ssh' do
-  owner node['autossh-init']['user']['uid']
-  group node['autossh-init']['user']['gid']
+  #owner node['autossh-init']['user']['uid']
+  #group node['autossh-init']['user']['gid']
+  owner node['autossh-init']['user']['username']
+  group node['autossh-init']['user']['username']
   mode '0700'
 end
 
