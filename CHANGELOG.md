@@ -3,9 +3,10 @@ autossh-init Cookbook CHANGELOG
 This file is used to list changes made in each version of the
 autossh_init cookbook.
 
-v0.1.6
+v0.1.7
 ------
-- Autodeploy /var/run/autossh and /var/log/autossh
+- Add "-o 'StrictHostKeyChecking no'" to SSH_OPTS, to avoid
+  silent autossh failures with new or changed target hosts
 
 v0.1.5
 ------

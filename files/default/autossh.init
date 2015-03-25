@@ -62,7 +62,7 @@ AUTOSSH_POLL="-5"
 AUTOSSH_OPTS="-M 0"
 
 # SSH specific command line options
-SSH_OPTS="-vv -f -N"
+SSH_OPTS="-vv -f -N -o 'StrictHostKeyChecking no'"
 
 # Forwarding ports, set to empty
 #SSH_LPORTS=""
