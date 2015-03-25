@@ -33,8 +33,9 @@ directory node['autossh-init']['user']['home'] do
   mode '0700'
 end
 
-directory node['autossh-init']['user']['home'] + 'ssh' do
+directory node['autossh-init']['user']['home'] + '/.ssh' do
   owner node['autossh-init']['user']['uid']
   group node['autossh-init']['user']['gid']
   mode '0700'
 end
+
