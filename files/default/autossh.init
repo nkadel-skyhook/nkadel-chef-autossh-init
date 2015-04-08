@@ -199,7 +199,7 @@ case "$1" in
                RETVAL="1"
             fi
         else
-            pid="$(/usr/bin/pgrep -d , -u ${AUTOSSH_USER} -G ${AUTOSSH_USER} java)"
+            pid="$(/usr/bin/pgrep -d , -u ${AUTOSSH_USER} -G ${AUTOSSH_USER} autossh)"
             if [ -z "$pid" ]; then
 #               status ${NAME}
 #               RETVAL="$?"
@@ -211,7 +211,7 @@ case "$1" in
             fi
         fi
          if [ -f ${AUTOSSH_LOCKFILE} ]; then
-            pid="$(/usr/bin/pgrep -d , -u ${AUTOSSH_USER} -G ${AUTOSSH_USER} java)"
+            pid="$(/usr/bin/pgrep -d , -u ${AUTOSSH_USER} -G ${AUTOSSH_USER} autossh)"
 # The lockfile exists but the process is not running
             if [ -z "$pid" ]; then
                log_failure_msg "${NAME} lockfile exists but process is not running"

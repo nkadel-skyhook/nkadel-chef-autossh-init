@@ -3,6 +3,10 @@ autossh-init Cookbook CHANGELOG
 This file is used to list changes made in each version of the
 autossh_init cookbook.
 
+v0.1.8
+------
+- Check for correct 'autossh' process in init script status report
+
 v0.1.7
 ------
 - Deploy ssh/config file to set 'StrictHostKeyChecking no',
