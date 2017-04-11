@@ -8,8 +8,8 @@
 # Provides: autossh
 # Required-Start: $network
 # Required-Stop: $network
-# Default-Start:
-# Default-Stop:
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
 # Description: autossh instance
 # Short-Description: start and stop autossh
 ### END INIT INFO

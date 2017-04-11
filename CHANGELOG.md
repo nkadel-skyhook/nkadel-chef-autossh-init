@@ -3,6 +3,11 @@ autossh-init Cookbook CHANGELOG
 This file is used to list changes made in each version of the
 autossh_init cookbook.
 
+v0.1.9
+------
+- Activate 'Default-Start' and 'Default-Stop' in SysV init script for
+  systemd to determine run levels
+
 v0.1.8
 ------
 - Check for correct 'autossh' process in init script status report
